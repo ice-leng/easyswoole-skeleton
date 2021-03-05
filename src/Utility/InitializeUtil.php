@@ -75,7 +75,7 @@ class InitializeUtil
      */
     public static function di(array $paths): void
     {
-        $path[] = dirname(__DIR__) . '/Configs';
+        $paths[] = dirname(__DIR__) . '/Configs';
         foreach ($paths as $path) {
             $files = File::scanDirectory($path)['files'];
             if (StringHelper::isEmpty($files)) {
