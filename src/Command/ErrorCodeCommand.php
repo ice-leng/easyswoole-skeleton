@@ -9,7 +9,7 @@ namespace EasySwoole\Skeleton\Command;
 
 use EasySwoole\Command\AbstractInterface\CommandHelpInterface;
 use EasySwoole\Command\AbstractInterface\CommandInterface;
-use EasySwoole\Skeleton\Utility\Log\Generate\MergeErrorCode;
+use EasySwoole\Skeleton\Utility\ErrorCode\Generate\MergeErrorCode;
 use EasySwoole\EasySwoole\Core;
 
 class ErrorCodeCommand implements CommandInterface

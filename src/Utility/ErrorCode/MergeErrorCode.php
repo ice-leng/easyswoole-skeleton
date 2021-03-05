@@ -1,6 +1,6 @@
 <?php
 
-namespace EasySwoole\Skeleton\Utility\Log\Generate;
+namespace EasySwoole\Skeleton\Utility\ErrorCode\Generate;
 
 use EasySwoole\Skeleton\BaseObject;
 use EasySwoole\Skeleton\Helpers\Arrays\ArrayHelper;
