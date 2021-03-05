@@ -5,7 +5,7 @@ return [
     'vendorPath'      =>  EASYSWOOLE_ROOT . '/vendor',
     // 错误码文件 目录
     'path'             => [
-        EASYSWOOLE_ROOT . '/vendor/easyswoole/skeleton/src/Errors',
+        EASYSWOOLE_ROOT . '/vendor/easyswoole-tool/skeleton/src/Errors',
         EASYSWOOLE_ROOT . '/app/Constants/Errors',
     ],
     // 合并生成 类 文件名称
