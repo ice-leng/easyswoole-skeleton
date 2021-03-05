@@ -1,6 +1,6 @@
 <?php
 
-use EasySwooleTools\Skeleton\Utility\Container;
+use EasySwoole\Skeleton\Utility\Container;
 use Psr\Container\ContainerInterface;
 
 return [
