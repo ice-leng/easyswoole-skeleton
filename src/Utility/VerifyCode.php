@@ -4,7 +4,7 @@ namespace EasySwoole\Skeleton\Utility;
 
 class VerifyCode
 {
-    const DURATION = 5 * 60;
+    const DURATION = 2 * 60;
 
     static function checkVerifyCode($code, $time, $hash)
     {
