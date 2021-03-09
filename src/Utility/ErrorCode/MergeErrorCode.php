@@ -126,13 +126,15 @@ class MergeErrorCode extends BaseObject
 
     /**
      * @param string $namespace
+     * @param string $classname
      *
      * @return string
      */
-    protected function getPrefix(string $namespace): string
+    protected function getPrefix(string $namespace, string $classname): string
     {
         $names = StringHelper::explode($namespace, '\\', true, true);
         array_unshift($names, 'ERROR');
+        $names[] = $classname;
         $names = array_map(function ($name) {
             return StringHelper::strtoupper($name);
         }, $names);
@@ -215,7 +217,7 @@ class MergeErrorCode extends BaseObject
 
         $classes = $reflector->getAllClasses();
         foreach ($classes as $class) {
-            $prefix = $this->getPrefix($class->getNamespaceName());
+            $prefix = $this->getPrefix($class->getNamespaceName(), $class->getShortName());
             $constants = $class->getReflectionConstants();
             foreach ($constants as $constant) {
                 $name = $prefix . '_' . $constant->getName();
