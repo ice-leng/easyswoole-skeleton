@@ -2,11 +2,18 @@
 
 namespace EasySwoole\Skeleton\Utility;
 
-class VerifyCode
+class VerifyCodeHash
 {
     const DURATION = 2 * 60;
 
-    static function checkVerifyCode($code, $time, $hash)
+    /**
+     * @param $code
+     * @param $time
+     * @param $hash
+     *
+     * @return bool
+     */
+    public static function checkVerifyCode($code, $time, $hash): bool
     {
         if ($time + self::DURATION < time()) {
             return false;
@@ -15,7 +22,13 @@ class VerifyCode
         return self::getVerifyCodeHash($code, $time) == $hash;
     }
 
-    static function getVerifyCodeHash($code, $time)
+    /**
+     * @param $code
+     * @param $time
+     *
+     * @return string
+     */
+    public static function getVerifyCodeHash($code, $time): string
     {
         return md5($code . $time);
     }
