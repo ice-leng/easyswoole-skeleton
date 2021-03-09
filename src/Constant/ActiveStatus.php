@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Constants\Status\Platform;
+namespace EasySwoole\Skeleton\Constant\Status;
 
 use EasySwoole\Skeleton\Framework\BaseEnum;
 
