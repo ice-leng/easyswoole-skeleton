@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace EasySwoole\Skeleton\Constant\Status;
+namespace EasySwoole\Skeleton\Constant;
 
 use EasySwoole\Skeleton\Framework\BaseEnum;
 
