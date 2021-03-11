@@ -617,7 +617,7 @@ class ArrayHelper
      *
      * @param array          $array
      * @param string|Closure $name
-     * @param bool           $keepKeys whether to maintain the array keys. If false, the resulting array
+     * @param bool           $keepKeys  whether to maintain the array keys. If false, the resulting array
      *                                  will be re-indexed with integers.
      *
      * @return array the list of column values
@@ -1132,5 +1132,27 @@ class ArrayHelper
             }
         }
         return $data;
+    }
+
+    /**
+     * 过滤掉 多维数组的 值为空的
+     * @param array $arr
+     *
+     * @return array
+     */
+    public static function arrayFilterRecursive(array &$arr)
+    {
+        if (count($arr) < 1) {
+            return [];
+        }
+        foreach ($arr as $k => $v) {
+            if (is_array($v)) {
+                $arr[$k] = self::arrayFilterRecursive($v);
+            }
+            if (StringHelper::isEmpty($arr[$k])) {
+                unset($arr[$k]);
+            }
+        }
+        return $arr;
     }
 }
