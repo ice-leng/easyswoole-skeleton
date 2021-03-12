@@ -2,6 +2,7 @@
 
 namespace EasySwoole\Skeleton\Utility;
 
+use EasySwoole\Component\Singleton;
 use EasySwoole\Skeleton\Helpers\Arrays\ArrayHelper;
 use EasySwoole\Skeleton\Helpers\StringHelper;
 
@@ -11,6 +12,9 @@ use EasySwoole\Skeleton\Helpers\StringHelper;
  */
 abstract class AbstractRedisCache
 {
+
+    use Singleton;
+
     /**
      * redis
      *
