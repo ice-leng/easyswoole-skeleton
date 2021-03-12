@@ -14,5 +14,5 @@ class ActiveStatus extends BaseEnum
     /**
      * @Message("未启用")
      */
-    const DISABLE = 1;
+    const DISABLE = 2;
 }
