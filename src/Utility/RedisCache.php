@@ -1,9 +1,8 @@
 <?php
 
-namespace EasySwooleTools\Skeleton\Utility;
+namespace EasySwoole\Skeleton\Utility;
 
 use EasySwoole\RedisPool\RedisPool;
-use EasySwoole\Skeleton\Utility\AbstractRedisCache;
 
 class RedisCache extends AbstractRedisCache
 {
