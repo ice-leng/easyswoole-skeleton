@@ -13,8 +13,11 @@ use EasySwoole\RedisPool\RedisPoolException;
 use EasySwoole\Utility\File;
 use EasySwoole\Skeleton\Helpers\Arrays\ArrayHelper;
 use EasySwoole\Skeleton\Helpers\StringHelper;
+use Hyperf\Utils\ApplicationContext;
+use Psr\Container\ContainerInterface;
 use Swoole\Coroutine\Scheduler;
 use Swoole\Timer;
+use Throwable;
 
 /**
  * 初始化 工具
@@ -72,6 +75,8 @@ class InitializeUtil
 
     /**
      * @param array $paths
+     *
+     * @throws Throwable
      */
     public static function di(array $paths): void
     {
@@ -96,6 +101,7 @@ class InitializeUtil
                 }
             }
         }
+        ApplicationContext::setContainer(Di::getInstance()->get(ContainerInterface::class));
     }
 
     /**

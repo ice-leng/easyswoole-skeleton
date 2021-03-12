@@ -31,4 +31,20 @@ class Container implements ContainerInterface
     {
         return Di::getInstance()->get($id) != null;
     }
+
+    /**
+     * @param string $name
+     * @param array  $parameters
+     *
+     * @return null
+     * @throws Throwable
+     */
+    public function make(string $name, array $parameters = [])
+    {
+        $data = Di::getInstance($parameters)->get($name);
+        if (is_null($data)) {
+            $data = new $name(...$parameters);
+        }
+        return $data;
+    }
 }
