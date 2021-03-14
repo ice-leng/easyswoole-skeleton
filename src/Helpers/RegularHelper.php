@@ -15,7 +15,7 @@ class RegularHelper
     public static function isInvalidUrl(string $url): bool
     {
         if (StringHelper::isEmpty($url)) {
-            return false;
+            return true;
         }
         $rule = "/((http|https):\/\/)+(\w+)[\w\/\.\-]*/";
         return preg_match($rule, $url);
@@ -32,7 +32,7 @@ class RegularHelper
     public static function isInvalidImage($url): bool
     {
         if (StringHelper::isEmpty($url)) {
-            return false;
+            return true;
         }
         $rule = "/((http|https):\/\/)?\w+\.(jpg|jpeg|gif|png)/";
         return preg_match($rule, $url);
@@ -48,7 +48,7 @@ class RegularHelper
     public static function isInvalidPassword($password): bool
     {
         if (StringHelper::isEmpty($password)) {
-            return false;
+            return true;
         }
         $rule = "^(?=.*[a-zA-Z0-9].*)(?=.*[a-zA-Z\\W].*)(?=.*[0-9\\W].*).{6,20}$";
         return preg_match($rule, $password);
@@ -64,7 +64,7 @@ class RegularHelper
     public static function isInvalidMobile($mobile): bool
     {
         if (StringHelper::isEmpty($mobile)) {
-            return false;
+            return true;
         }
         if (strpos($mobile, '+86') === 0) {
             $mobile = substr($mobile, 3);

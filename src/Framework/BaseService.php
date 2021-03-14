@@ -184,9 +184,9 @@ abstract class BaseService
         if (StringHelper::isEmpty($path)) {
             return $path;
         }
-        if (RegularHelper::isInvalidUrl($path)) {
+        if (!RegularHelper::isInvalidUrl($path)) {
             return $path;
         }
-        return config($config) . $path;
+        return config($config) ?? '' . $path;
     }
 }
