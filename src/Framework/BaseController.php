@@ -14,6 +14,7 @@ use EasySwoole\HttpAnnotation\Exception\Annotation\ParamValidateError;
 use EasySwoole\Skeleton\Framework\Http\Request as BaseRequest;
 use EasySwoole\Validate\Validate;
 use Exception;
+use Throwable;
 
 /**
  * 公共Controller类
@@ -26,7 +27,7 @@ class BaseController extends AnnotationController
         return parent::__hook($actionName, $request, $response);
     }
 
-    protected function onException(\Throwable $throwable): void
+    protected function onException(Throwable $throwable): void
     {
         Logger::getInstance()->error(format_throwable($throwable));
         if ($throwable instanceof BizException) {
@@ -66,7 +67,7 @@ class BaseController extends AnnotationController
     {
         $value = $this->request()->getRequestParam($key);
         if (empty($value)) {
-            throw new BizException(CommonError::INVALID_PARAMS, $key . ' 参数不存在');
+            throw new BizException(CommonError::INVALID_PARAMS, [], $key . ' 参数不存在');
         }
         return $value;
     }
@@ -203,7 +204,7 @@ class BaseController extends AnnotationController
             $this->response()->withHeader('Cache-Control', 'max-age=0');
             $this->response()->end();
             return true;
-        }  else {
+        } else {
             return false;
         }
 
