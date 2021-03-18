@@ -169,50 +169,44 @@ class BaseController extends AnnotationController
      */
     private function getContentType(string $type): string
     {
-        switch (strtolower($type)) {
-            case 'docx':
-                $contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-                break;
-            case 'dotx':
-                $contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
-                break;
-            case "pptx":
-                $contentType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-                break;
-            case "ppsx":
-                $contentType = "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
-                break;
-            case "potx":
-                $contentType = "application/vnd.openxmlformats-officedocument.presentationml.template";
-                break;
-            case "xltx":
-                $contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
-                break;
-            case 'xlsx':
-                $contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                break;
-            case 'pdo':
-                $contentType = 'application/pdf';
-                break;
-            default:
-                $contentType = '';
-        }
-        return $contentType;
+        $map = [
+            "docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "dotx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+            "pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+            "potx" => "application/vnd.openxmlformats-officedocument.presentationml.template",
+            "xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
+            'xlsx' => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            'pdo'  => 'application/pdf',
+        ];
+        return $map[strtolower($type)] ?? '';
     }
 
-    protected function download(string $file, string $name)
+    /**
+     * @param string $file
+     * @param string $name
+     *
+     * @return bool
+     */
+    protected function download(string $file, string $name): bool
     {
-        // 获取指定路径下的 excel 文件，例如这里获取项目根目录下的 test.xlsx 文件
-        $this->response()->write(file_get_contents($file));
-        $contentType = $this->getContentType(explode('.', $file)[1]);
-        // 设置文件流内容类型
-        if ($contentType) {
-            $this->response()->withHeader('Content-Type', $contentType);
+        if (!$this->response()->isEndResponse()) {
+            // 获取指定路径下的 excel 文件，例如这里获取项目根目录下的 test.xlsx 文件
+            $this->response()->write(file_get_contents($file));
+            $contentType = $this->getContentType(explode('.', $file)[1]);
+            // 设置文件流内容类型
+            if ($contentType) {
+                $this->response()->withHeader('Content-Type', $contentType);
+            }
+            // 设置要下载的文件名称，一定要带文件类型后缀
+            $this->response()->withHeader('Content-Disposition', 'attachment;filename=' . $name);
+            $this->response()->withHeader('Cache-Control', 'max-age=0');
+            $this->response()->end();
+            return true;
+        }  else {
+            return false;
         }
-        // 设置要下载的文件名称，一定要带文件类型后缀
-        $this->response()->withHeader('Content-Disposition', 'attachment;filename=' . $name);
-        $this->response()->withHeader('Cache-Control', 'max-age=0');
-        $this->response()->end();
+
     }
 
     /**
