@@ -8,6 +8,7 @@ use EasySwoole\Skeleton\Component\Sort\Sort;
 use EasySwoole\Skeleton\Entities\PageEntity;
 use EasySwoole\Skeleton\Framework\Exception\MethodNotImplException;
 use Hyperf\Database\Model\Builder;
+use Hyperf\Database\Query\Expression;
 
 abstract class BaseService
 {
@@ -15,21 +16,22 @@ abstract class BaseService
     /**
      * page
      *
-     * @param Builder    $query
-     * @param PageEntity $pageEntity
+     * @param Builder           $query
+     * @param PageEntity        $pageEntity
+     * @param string|Expression $columns
      *
      * @return array
      */
-    public function page(Builder $query, PageEntity $pageEntity): array
+    public function page(Builder $query, PageEntity $pageEntity, $columns = '*'): array
     {
         $pageSize = $pageEntity->getPageSize();
-        $total = $query->count();
+        $total = $query->count($columns);
         $list = $query->forPage($pageEntity->getPage(), $pageSize)->get()->toArray();
         return [
-            'list'      => $list,
-            'page'      => $pageEntity->getPage(),
-            'pageSize'  => $pageSize,
-            'total'     => $total,
+            'list'     => $list,
+            'page'     => $pageEntity->getPage(),
+            'pageSize' => $pageSize,
+            'total'    => $total,
         ];
     }
 
@@ -49,10 +51,10 @@ abstract class BaseService
         $params = array_values($params);
         $list = array_slice($params, $offset, $pageSize);
         return [
-            'list'      => $list,
-            'page'      => $pageEntity->getPage(),
-            'pageSize'  => $pageSize,
-            'total'     => $total,
+            'list'     => $list,
+            'page'     => $pageEntity->getPage(),
+            'pageSize' => $pageSize,
+            'total'    => $total,
         ];
     }
 
