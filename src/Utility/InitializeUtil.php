@@ -4,6 +4,10 @@ namespace EasySwoole\Skeleton\Utility;
 
 use EasySwoole\Component\Di;
 use EasySwoole\EasySwoole\Config;
+use EasySwoole\EasySwoole\SysConst;
+use EasySwoole\Http\Message\Status;
+use EasySwoole\Http\Request;
+use EasySwoole\Http\Response;
 use EasySwoole\HyperfOrm\MysqlPool;
 use EasySwoole\Pool\Exception\Exception;
 use EasySwoole\Pool\Manager;
@@ -29,6 +33,31 @@ use Throwable;
  */
 class InitializeUtil
 {
+
+    /**
+     * 跨域
+     */
+    public static function cors()
+    {
+        // 实现 onRequest 事件
+        Di::getInstance()->set(SysConst::HTTP_GLOBAL_ON_REQUEST, function (Request $request, Response $response): bool {
+            ###### 处理请求的跨域问题 ######
+            $response->withHeader('Access-Control-Allow-Origin', '*');
+            $response->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+            $response->withHeader('Access-Control-Allow-Credentials', 'true');
+            $response->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+            if ($request->getMethod() === 'OPTIONS') {
+                $response->withStatus(Status::CODE_OK);
+                return false;
+            }
+            if (StringHelper::matchWildcard("*favicon*", $request->getUri()->getPath())) {
+                $response->withStatus(Status::CODE_OK);
+                return false;
+            }
+            return true;
+        });
+    }
+
     /**
      * 服务
      *
@@ -204,6 +233,7 @@ class InitializeUtil
 
     /**
      * websocket
+     *
      * @param EventRegister $register
      * @param               $parser
      *
