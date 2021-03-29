@@ -10,8 +10,10 @@ use EasySwoole\Pool\Manager;
 use EasySwoole\Redis\Config\RedisConfig;
 use EasySwoole\RedisPool\RedisPool;
 use EasySwoole\RedisPool\RedisPoolException;
+use EasySwoole\Socket\Dispatcher;
 use EasySwoole\Utility\File;
 use EasySwoole\Skeleton\Helpers\Arrays\ArrayHelper;
+use EasySwoole\EasySwoole\Swoole\EventRegister;
 use EasySwoole\Skeleton\Helpers\StringHelper;
 use Hyperf\Utils\ApplicationContext;
 use Psr\Container\ContainerInterface;
@@ -175,5 +177,51 @@ class InitializeUtil
             }
         });
         $scheduler->start();
+    }
+
+    /**
+     * 进程
+     *
+     * @param array $classes
+     * @param bool  $isOpen
+     */
+    public static function process(array $classes, bool $isOpen = true)
+    {
+        if (!$isOpen) {
+            return;
+        }
+        foreach ($classes as $class) {
+            $processConfig = new \EasySwoole\Component\Process\Config();
+            $processConfig->setProcessName($class);//设置进程名称
+            $processConfig->setProcessGroup($class);//设置进程组
+            $processConfig->setRedirectStdinStdout(false);//是否重定向标准io
+            $processConfig->setPipeType($processConfig::PIPE_TYPE_SOCK_DGRAM);//设置管道类型
+            $processConfig->setEnableCoroutine(true);//是否自动开启协程
+            $processConfig->setMaxExitWaitTime(3);//最大退出等待时间
+            \EasySwoole\Component\Process\Manager::getInstance()->addProcess(new $class($processConfig));
+        }
+    }
+
+    /**
+     * websocket
+     * @param EventRegister $register
+     * @param               $parser
+     *
+     * @throws \EasySwoole\Socket\Exception\Exception
+     */
+    public static function webSocket(EventRegister $register, $parser)
+    {
+        // 创建一个 Dispatcher 配置
+        $conf = new \EasySwoole\Socket\Config();
+        // 设置 Dispatcher 为 WebSocket 模式
+        $conf->setType(\EasySwoole\Socket\Config::WEB_SOCKET);
+        // 设置解析器对象
+        $conf->setParser($parser);
+        // 创建 Dispatcher 对象 并注入 config 对象
+        $dispatch = new Dispatcher($conf);
+        // 给server 注册相关事件 在 WebSocket 模式下  on message 事件必须注册 并且交给 Dispatcher 对象处理
+        $register->set(EventRegister::onMessage, function (\swoole_websocket_server $server, \swoole_websocket_frame $frame) use ($dispatch) {
+            $dispatch->dispatch($server, $frame->data, $frame);
+        });
     }
 }
