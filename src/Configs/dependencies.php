@@ -4,7 +4,7 @@ use EasySwoole\Skeleton\Utility\Alipay\Alipay;
 use EasySwoole\Skeleton\Utility\CloudStorage\Impl\AliyunOSS;
 use EasySwoole\Skeleton\Utility\CloudStorage\Impl\QiNiuObject;
 use EasySwoole\Skeleton\Utility\Sms\Impl\AliyunSms;
-use EasySwoole\WeChat\WeChat;
+use EasySwoole\Skeleton\Utility\WeChat\WeChat;
 
 return [
     AliyunOSS::class   => AliyunOSS::class,
