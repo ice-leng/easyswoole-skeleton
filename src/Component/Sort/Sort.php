@@ -42,18 +42,10 @@ class Sort extends BaseObject
     {
         $data = [];
         foreach ($attributes as $name => $attribute) {
-            if (!is_array($attribute)) {
-                $data[$attribute] = [
-                    'asc'  => [$attribute => SORT_ASC],
-                    'desc' => [$attribute => SORT_DESC],
-                ];
-            } elseif (!isset($attribute['asc'], $attribute['desc'])) {
-                $data[$name] = array_merge([
-                    'asc'  => [$name => SORT_ASC],
-                    'desc' => [$name => SORT_DESC],
-                ], $attribute);
-            } else {
+            if ($attribute instanceof SortAttribute) {
                 $data[$name] = $attribute;
+            } elseif (is_string($attribute)) {
+                $data[$attribute] = self::generateSortAttribute($attribute, SORT_DESC);
             }
         }
         return $data;
