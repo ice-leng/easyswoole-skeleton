@@ -46,6 +46,8 @@ class Sort extends BaseObject
                 $data[$name] = $attribute;
             } elseif (is_string($attribute)) {
                 $data[$attribute] = self::generateSortAttribute($attribute, SORT_DESC);
+            } elseif (is_array($attribute) && !empty($attribute['asc']) && !empty($attribute['desc'])) {
+                $data[$name] = new SortAttribute($attribute);
             }
         }
         return $data;
