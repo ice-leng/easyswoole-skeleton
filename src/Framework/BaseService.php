@@ -59,17 +59,17 @@ abstract class BaseService
     }
 
     /**
-     * default
+     * @param string $attribute
      *
      * @return Sort
      */
-    private function getDefaultSort(): Sort
+    private function getDefaultSort(string $attribute = 'create_at'): Sort
     {
         return new Sort([
             'attributes'   => [
-                'create_at',
+                $attribute,
             ],
-            'defaultOrder' => ['create_at' => SORT_DESC],
+            'defaultOrder' => [$attribute => SORT_DESC],
         ]);
     }
 
@@ -98,7 +98,11 @@ abstract class BaseService
         $item = [];
         $results = isset($data['list']) ? $data['list'] : $data;
         foreach ($results as $key => $result) {
-            $item[$key] = call_user_func($call, $result);
+            $content = call_user_func($call, $result);;
+            if (is_null($content)) {
+                continue;
+            }
+            $item[$key] = $content;
         }
         if (isset($data['list'])) {
             $data['list'] = $item;
