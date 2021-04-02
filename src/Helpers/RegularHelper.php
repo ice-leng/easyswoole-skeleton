@@ -50,7 +50,7 @@ class RegularHelper
         if (StringHelper::isEmpty($password)) {
             return true;
         }
-        $rule = "^(?=.*[a-zA-Z0-9].*)(?=.*[a-zA-Z\\W].*)(?=.*[0-9\\W].*).{6,20}$";
+        $rule = '/^(?=.*[a-zA-Z0-9].*)(?=.*[a-zA-Z\W].*)(?=.*[0-9\W].*).{6,20}$/';
         return !preg_match($rule, $password);
     }
 
@@ -69,7 +69,7 @@ class RegularHelper
         if (strpos($mobile, '+86') === 0) {
             $mobile = substr($mobile, 3);
         }
-        $rule = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$";
+        $rule = '/^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/';
         return !preg_match($rule, $mobile);
     }
 }
