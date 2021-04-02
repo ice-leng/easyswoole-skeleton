@@ -309,11 +309,25 @@ class FormatHelper
 
     /**
      * 影藏手机号
+     *
      * @param string $mobile
      *
      * @return string|string[]
      */
-    public static function hideMobile(string $mobile){
-        return substr_replace($mobile,'****',3,4);
+    public static function hideMobile(string $mobile): string
+    {
+        return substr_replace($mobile, '****', 3, 4);
+    }
+
+    /**
+     * 影藏身份证
+     *
+     * @param string $idcard
+     *
+     * @return string|string[]
+     */
+    public static function hidcard(string $idcard): string
+    {
+        return strlen($idcard) == 15 ? substr_replace($idcard, "*****", 6, 5) : (strlen($idcard) == 18 ? substr_replace($idcard, "********", 6, 8) : $idcard);
     }
 }
