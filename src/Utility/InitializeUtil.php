@@ -45,7 +45,7 @@ class InitializeUtil
             $response->withHeader('Access-Control-Allow-Origin', '*');
             $response->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
             $response->withHeader('Access-Control-Allow-Credentials', 'true');
-            $response->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+            $response->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Token');
             if ($request->getMethod() === 'OPTIONS') {
                 $response->withStatus(Status::CODE_OK);
                 return false;
