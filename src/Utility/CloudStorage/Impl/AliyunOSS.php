@@ -31,13 +31,13 @@ class AliyunOSS implements AbstractCloudStorage
 
     public function __construct()
     {
-        $this->accessKeyID = config('thirdparty.aliyun.access_key');
-        $this->accessKeySecret = config('thirdparty.aliyun.secret_key');
-        $this->endpoint = config('thirdparty.aliyun.endpoint');
-        $this->regionId = config('thirdparty.aliyun.regionId');
+        $this->accessKeyID = config('thirdparty.aliyun.oss.access_key');
+        $this->accessKeySecret = config('thirdparty.aliyun.oss.secret_key');
+        $this->endpoint = config('thirdparty.aliyun.oss.endpoint');
+        $this->regionId = config('thirdparty.aliyun.oss.regionId');
 
-        $this->roleArn = config('thirdparty.aliyun.roleArn');
-        $this->roleSessionName = config('thirdparty.aliyun.roleSessionName');
+        $this->roleArn = config('thirdparty.aliyun.oss.roleArn');
+        $this->roleSessionName = config('thirdparty.aliyun.oss.roleSessionName');
 
         try {
             AlibabaCloud::accessKeyClient($this->accessKeyID, $this->accessKeySecret)->regionId($this->regionId)->asDefaultClient();
