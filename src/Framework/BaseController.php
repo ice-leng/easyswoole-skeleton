@@ -197,17 +197,16 @@ class BaseController extends AnnotationController
             $contentType = $this->getContentType(explode('.', $file)[1]);
             // 设置文件流内容类型
             if ($contentType) {
-                $this->response()->withHeader('Content-Type', $contentType);
+                $this->response()->withHeader('Content-Type', $contentType . ';charset=utf-8');
             }
             // 设置要下载的文件名称，一定要带文件类型后缀
-            $this->response()->withHeader('Content-Disposition', 'attachment;filename=' . $name);
+            $this->response()->withHeader('Content-Disposition', 'attachment;filename=' . urlencode($name));
             $this->response()->withHeader('Cache-Control', 'max-age=0');
             $this->response()->end();
             return true;
         } else {
             return false;
         }
-
     }
 
     /**
