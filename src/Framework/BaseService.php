@@ -98,7 +98,7 @@ abstract class BaseService
         $item = [];
         $results = isset($data['list']) ? $data['list'] : $data;
         foreach ($results as $key => $result) {
-            $content = call_user_func($call, $result);;
+            $content = call_user_func($call, $result);
             if (is_null($content)) {
                 continue;
             }

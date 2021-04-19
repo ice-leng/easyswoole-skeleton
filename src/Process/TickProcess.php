@@ -1,6 +1,6 @@
 <?php
 
-namespace EasySwoole\Skeleton\Component\Process;
+namespace EasySwoole\Skeleton\Process;
 
 use EasySwoole\Component\Process\AbstractProcess;
 use EasySwoole\EasySwoole\Logger;

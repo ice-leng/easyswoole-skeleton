@@ -36,11 +36,13 @@ class InitializeUtil
 
     /**
      * 跨域
+     *
+     * @param callable|null $call
      */
-    public static function cors()
+    public static function cors(?callable $call = null)
     {
         // 实现 onRequest 事件
-        Di::getInstance()->set(SysConst::HTTP_GLOBAL_ON_REQUEST, function (Request $request, Response $response): bool {
+        Di::getInstance()->set(SysConst::HTTP_GLOBAL_ON_REQUEST, function (Request $request, Response $response) use ($call): bool {
             ###### 处理请求的跨域问题 ######
             $response->withHeader('Access-Control-Allow-Origin', '*');
             $response->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -53,6 +55,9 @@ class InitializeUtil
             if (StringHelper::matchWildcard("*favicon*", $request->getUri()->getPath())) {
                 $response->withStatus(Status::CODE_OK);
                 return false;
+            }
+            if (!is_null($call)) {
+                return call_user_func($call, $request, $response);
             }
             return true;
         });
