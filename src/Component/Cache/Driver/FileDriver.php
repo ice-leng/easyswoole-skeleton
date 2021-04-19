@@ -77,7 +77,7 @@ class FileDriver extends Driver implements CacheInterface
     {
         // 如果不设置时间 默认 100 年
         if (is_null($ttl)) {
-            $ttl = 3600 * 24 * 30 * 100;
+            $ttl = 3600 * 24 * 30 * 12 * 100;
         }
         $ttl = $ttl + time();
         return $ttl;
