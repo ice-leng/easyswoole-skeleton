@@ -67,7 +67,7 @@ class FileDriver extends Driver implements CacheInterface
         if ($this->fileSystem->missing($file)) {
             return $default;
         }
-        if ($this->fileSystem->lastModified($file) > time()) {
+        if ($this->fileSystem->lastModified($file) < time()) {
             return $default;
         }
         return $this->packer->unpack($this->fileSystem->get($file));
