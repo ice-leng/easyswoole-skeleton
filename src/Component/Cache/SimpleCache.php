@@ -9,6 +9,8 @@
 
 namespace EasySwoole\Skeleton\Component\Cache;
 
+use EasySwoole\Skeleton\Component\Cache\Driver\FileDriver;
+use EasySwoole\Skeleton\Component\Cache\Packer\PhpSerializerPacker;
 use Psr\SimpleCache\CacheInterface;
 
 class SimpleCache implements CacheInterface
@@ -16,13 +18,15 @@ class SimpleCache implements CacheInterface
 
     protected $driver;
 
-    public function __construct(SimpleCacheConfig $config)
+    public function __construct()
     {
-        $driver = $config->getDriver();
+        $cache = config('cache');
+        $driver = $cache['driver'] ?? FileDriver::class;
+        $packer = $cache['packer'] ?? PhpSerializerPacker::class;
         $this->driver = new $driver([
-            'dir'    => $config->getDir(),
-            'prefix' => $config->getPrefix(),
-            'packer' => $config->getPacker(),
+            'packer' => new $packer,
+            'prefix' => $cache['prefix'] ?? 'c:',
+            'dir'    => $cache['dir'] ?? null,
         ]);
     }
 
