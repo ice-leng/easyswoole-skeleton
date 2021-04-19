@@ -58,7 +58,7 @@ class FileDriver extends Driver implements CacheInterface
     /**
      * @return string
      */
-    protected function getPrefix(): string
+    protected function getNewPrefix(): string
     {
         return $this->dir . DIRECTORY_SEPARATOR . $this->prefix;
     }
@@ -70,7 +70,7 @@ class FileDriver extends Driver implements CacheInterface
      */
     public function getCacheKey(string $key)
     {
-        return $this->getPrefix() . $key . '.cache';
+        return $this->getNewPrefix() . $key . '.cache';
     }
 
     /**
@@ -120,7 +120,7 @@ class FileDriver extends Driver implements CacheInterface
 
     public function clear()
     {
-        $files = glob($this->getPrefix() . '*');
+        $files = glob($this->getNewPrefix() . '*');
         foreach ($files as $file) {
             if (is_dir($file)) {
                 continue;
