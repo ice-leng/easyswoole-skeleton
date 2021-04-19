@@ -33,42 +33,4 @@ class Driver extends BaseObject
     {
         return $this->prefix . $key;
     }
-
-    /**
-     * @return string|null
-     */
-    public function getPrefix(): ?string
-    {
-        return $this->prefix;
-    }
-
-    /**
-     * @param string|null $prefix
-     *
-     * @return Driver
-     */
-    public function setPrefix(?string $prefix): Driver
-    {
-        $this->prefix = $prefix;
-        return $this;
-    }
-
-    /**
-     * @return PackerInterface
-     */
-    public function getPacker(): PackerInterface
-    {
-        return $this->packer;
-    }
-
-    /**
-     * @param PackerInterface $packer
-     *
-     * @return Driver
-     */
-    public function setPacker(PackerInterface $packer): Driver
-    {
-        $this->packer = $packer;
-        return $this;
-    }
 }

@@ -50,10 +50,18 @@ class BaseObject
             return $className::byValue($value);
         }
 
-        $class = new $className;
-
-        if (is_object($value) && $class instanceof $value) {
-            return $value;
+        if (interface_exists($className)) {
+            if (!is_object($value)) {
+                $value = new $value;
+            }
+            if ($value instanceof $className) {
+                return $value;
+            }
+        } else {
+            $class = new $className;
+            if (is_object($value) && $class instanceof $value) {
+                return $value;
+            }
         }
 
         if ($class instanceof BaseObject) {
