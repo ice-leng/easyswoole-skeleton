@@ -24,7 +24,7 @@ class SimpleCache implements CacheInterface
         $driver = $cache['driver'] ?? FileDriver::class;
         $packer = $cache['packer'] ?? PhpSerializerPacker::class;
         $this->driver = new $driver([
-            'packer' => new $packer,
+            'packer' => $packer,
             'prefix' => $cache['prefix'] ?? 'c:',
             'dir'    => $cache['dir'] ?? null,
         ]);

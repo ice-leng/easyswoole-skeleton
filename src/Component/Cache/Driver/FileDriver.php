@@ -22,6 +22,25 @@ class FileDriver extends Driver implements CacheInterface
     protected $dir;
 
     /**
+     * @return string|null
+     */
+    public function getDir(): ?string
+    {
+        return $this->dir;
+    }
+
+    /**
+     * @param string|null $dir
+     *
+     * @return FileDriver
+     */
+    public function setDir(?string $dir): FileDriver
+    {
+        $this->dir = $dir;
+        return $this;
+    }
+
+    /**
      * @var FileSystem
      */
     protected $fileSystem;
