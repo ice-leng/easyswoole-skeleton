@@ -9,6 +9,7 @@ namespace EasySwoole\Skeleton\Command;
 
 use EasySwoole\Command\AbstractInterface\CommandHelpInterface;
 use EasySwoole\Command\AbstractInterface\CommandInterface;
+use EasySwoole\Command\Color;
 use EasySwoole\Skeleton\Utility\ErrorCode\MergeErrorCode;
 use EasySwoole\EasySwoole\Core;
 
@@ -26,9 +27,9 @@ class ErrorCodeCommand implements CommandInterface
             $config = config('errorCode', []);
             $mergeErrorCode = new MergeErrorCode($config);
             $status = $mergeErrorCode->generate();
-            return $status ? 'success' : 'false: generate fail';
+            return $status ? Color::info('success') : Color::error('false: generate fail');
         }catch (\Exception $exception) {
-            return "false: {$exception->getMessage()}";
+            return Color::error("false: {$exception->getMessage()}");
         }
     }
 
