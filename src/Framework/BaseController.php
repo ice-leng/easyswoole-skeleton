@@ -201,6 +201,7 @@ class BaseController extends AnnotationController
             }
             // 设置要下载的文件名称，一定要带文件类型后缀
             $this->response()->withHeader('Content-Disposition', 'attachment;filename=' . urlencode($name));
+            $this->response()->withHeader('Access-Control-Expose-Headers', 'Content-Disposition');
             $this->response()->withHeader('Cache-Control', 'max-age=0');
             $this->response()->end();
             return true;
