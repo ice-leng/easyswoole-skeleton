@@ -74,7 +74,11 @@ class InitializeUtil
         if (StringHelper::isEmpty($path) || StringHelper::isEmpty($namespace)) {
             return;
         }
-        $files = File::scanDirectory($path)['files'];
+        $scan = File::scanDirectory($path);
+        if (!$scan) {
+            return;
+        }
+        $files = $scan['files'];
         if (StringHelper::isEmpty($files)) {
             return;
         }
@@ -97,7 +101,11 @@ class InitializeUtil
             return;
         }
         $data = [];
-        $files = File::scanDirectory($path)['files'];
+        $scan = File::scanDirectory($path);
+        if (!$scan) {
+            return;
+        }
+        $files = $scan['files'];
         if (StringHelper::isEmpty($files)) {
             return;
         }
@@ -118,7 +126,11 @@ class InitializeUtil
     {
         $paths[] = dirname(__DIR__) . '/Configs';
         foreach ($paths as $path) {
-            $files = File::scanDirectory($path)['files'];
+            $scan = File::scanDirectory($path);
+            if (!$scan) {
+                continue;
+            }
+            $files = $scan['files'];
             if (StringHelper::isEmpty($files)) {
                 continue;
             }
