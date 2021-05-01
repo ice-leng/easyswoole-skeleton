@@ -14,6 +14,7 @@ use EasySwoole\HttpAnnotation\Exception\Annotation\ParamValidateError;
 use EasySwoole\Skeleton\Framework\Http\Request as BaseRequest;
 use EasySwoole\Validate\Validate;
 use Exception;
+use stdClass;
 use Throwable;
 
 /**
@@ -128,7 +129,7 @@ class BaseController extends AnnotationController
     protected function success($data = null, string $msg = 'ok'): bool
     {
         if (StringHelper::isEmpty($data)) {
-            $data = new \stdClass();
+            $data = new stdClass();
         }
         return $this->writeJson(CommonError::SUCCESS, $data, $msg);
     }
@@ -143,7 +144,7 @@ class BaseController extends AnnotationController
      */
     protected function fail(string $code, string $message): bool
     {
-        return $this->writeJson($code, null, $message);
+        return $this->writeJson($code, new stdClass(), $message);
     }
 
     protected function writeJson($statusCode = 200, $result = null, $msg = null)
