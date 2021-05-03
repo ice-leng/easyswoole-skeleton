@@ -13,7 +13,7 @@ class CommonError extends BaseEnum
     const SUCCESS = '0';
 
     /**
-     * @Message("系统错误")
+     * @Message("系统错误，稍后刷新重试")
      */
     const SERVER_ERROR = 'F-000-000-500';
 
