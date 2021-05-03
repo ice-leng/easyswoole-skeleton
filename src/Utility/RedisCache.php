@@ -131,6 +131,10 @@ class RedisCache
             }
             $output[$index] = unserialize($item);
         }
+        if (count($keys) === count($output)) {
+            return $output;
+        }
+
         $models = [];
         if (!is_null($call)) {
             $models = call_user_func($call, $missed);
