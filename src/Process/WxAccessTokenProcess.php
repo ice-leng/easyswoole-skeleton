@@ -9,7 +9,7 @@ use EasySwoole\Spl\SplArray;
 use Swoole\Coroutine;
 use Throwable;
 
-class TickProcess extends AbstractProcess
+class WxAccessTokenProcess extends AbstractProcess
 {
     protected function run($arg)
     {
@@ -18,17 +18,19 @@ class TickProcess extends AbstractProcess
                 try {
                     $weChat = new WeChat();
                     $config = new SplArray(config('thirdparty.wechat'));
-                    if ($config->get('app_id') && $config->get('app_secret')) {
-                        $weChat->miniProgram()->accessToken()->refresh();
+                    $miniProgramAccessToken = $weChat->miniProgram()->accessToken();
+                    if ($config->get('app_id') && $config->get('app_secret') && !$miniProgramAccessToken->getToken()) {
+                        $miniProgramAccessToken->refresh();
                     }
 
-                    if ($config->get('appId') && $config->get('appSecret')) {
-                        $weChat->officialAccount()->accessToken()->refresh();
+                    $officialAccountAccessToken = $weChat->officialAccount()->accessToken();
+                    if ($config->get('appId') && $config->get('appSecret') && !$officialAccountAccessToken->getToken()) {
+                        $officialAccountAccessToken->refresh();
                     }
                 } catch (Throwable $exception) {
                     Logger::getInstance()->error(format_throwable($exception));
                 }
-                Coroutine::sleep(7200);
+                Coroutine::sleep(7180);
             }
         });
     }
