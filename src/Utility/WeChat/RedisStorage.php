@@ -25,6 +25,9 @@ class RedisStorage implements StorageInterface
 
     public function set($key, $value, int $expire = null)
     {
+        if ($expire > time()) {
+            $expire -= time();
+        }
         RedisPool::defer('redis')->set($this->prefix . $key, $value, $expire);
     }
 }
