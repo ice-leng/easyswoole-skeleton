@@ -18,10 +18,8 @@ class WxJsApiTicketProcess extends AbstractProcess
                 try {
                     $weChat = new WeChat();
                     $config = new SplArray(config('thirdparty.wechat'));
-
-                    $jsTicket = $weChat->officialAccount()->jsApi()->sdk()->jsTicket();
-                    if ($config->get('appId') && $config->get('appSecret') && !$jsTicket->getTicket()) {
-                        $jsTicket->refreshTicket();
+                    if ($config->get('appId') && $config->get('appSecret')) {
+                        $weChat->officialAccount()->jsApi()->sdk()->jsTicket()->refreshTicket();
                     }
                 } catch (Throwable $exception) {
                     Logger::getInstance()->error(format_throwable($exception));

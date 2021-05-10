@@ -18,14 +18,13 @@ class WxAccessTokenProcess extends AbstractProcess
                 try {
                     $weChat = new WeChat();
                     $config = new SplArray(config('thirdparty.wechat'));
-                    $miniProgramAccessToken = $weChat->miniProgram()->accessToken();
-                    if ($config->get('app_id') && $config->get('app_secret') && !$miniProgramAccessToken->getToken()) {
-                        $miniProgramAccessToken->refresh();
+
+                    if ($config->get('app_id') && $config->get('app_secret')) {
+                        $weChat->miniProgram()->accessToken()->refresh();
                     }
 
-                    $officialAccountAccessToken = $weChat->officialAccount()->accessToken();
-                    if ($config->get('appId') && $config->get('appSecret') && !$officialAccountAccessToken->getToken()) {
-                        $officialAccountAccessToken->refresh();
+                    if ($config->get('appId') && $config->get('appSecret')) {
+                        $weChat->officialAccount()->accessToken()->refresh();
                     }
                 } catch (Throwable $exception) {
                     Logger::getInstance()->error(format_throwable($exception));
