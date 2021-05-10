@@ -26,7 +26,7 @@ class WxJsApiTicketProcess extends AbstractProcess
                 } catch (Throwable $exception) {
                     Logger::getInstance()->error(format_throwable($exception));
                 }
-                Coroutine::sleep(7180);
+                Coroutine::sleep(7110);
             }
         });
     }
