@@ -2,6 +2,7 @@
 
 namespace EasySwoole\Skeleton\Framework;
 
+use EasySwoole\HyperfOrm\Db;
 use EasySwoole\Skeleton\Helpers\RegularHelper;
 use EasySwoole\Skeleton\Helpers\StringHelper;
 use EasySwoole\Skeleton\Component\Sort\Sort;
@@ -16,16 +17,15 @@ abstract class BaseService
     /**
      * page
      *
-     * @param Builder           $query
-     * @param PageEntity        $pageEntity
-     * @param string|Expression $columns
+     * @param Builder    $query
+     * @param PageEntity $pageEntity
      *
      * @return array
      */
-    public function page(Builder $query, PageEntity $pageEntity, $columns = '*'): array
+    public function page(Builder $query, PageEntity $pageEntity): array
     {
         $pageSize = $pageEntity->getPageSize();
-        $total = $query->count($columns);
+        $total = $total = Db::selectOne("select count(*) as count from ({$query->toSql()}) as b", $query->getBindings())->count;
         $list = $query->forPage($pageEntity->getPage(), $pageSize)->get()->toArray();
         return [
             'list'     => $list,
