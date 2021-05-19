@@ -55,5 +55,10 @@
       "name": "lengbin",
       "email": "xykxyk2008@163.com"
     }
-  ]
+  ],
+  "extra": {
+    "easyswoole": {
+      "config": "EasySwoole\\Skeleton\\ConfigProvider"
+    }
+  }
 }
