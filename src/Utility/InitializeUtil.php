@@ -118,37 +118,34 @@ class InitializeUtil
     }
 
     /**
-     * @param array $paths
+     * @param string|null $path
      *
      * @throws Throwable
      */
-    public static function di(array $paths): void
+    public static function di(?string $path = null): void
     {
-        $paths[] = dirname(__DIR__) . '/Configs';
-        foreach ($paths as $path) {
-            $scan = File::scanDirectory($path);
-            if (!$scan) {
-                continue;
-            }
-            $files = $scan['files'];
-            if (StringHelper::isEmpty($files)) {
-                continue;
-            }
-            foreach ($files as $file) {
-                $name = StringHelper::basename($file, '.php');
-                if ($name !== 'dependencies') {
-                    continue;
-                }
-                $results = include $file;
-                foreach ($results as $interface => $impl) {
-                    if (is_int($interface)) {
-                        Di::getInstance()->set($impl['key'], $impl['obj'], ...$impl['arg']);
-                    } else {
-                        Di::getInstance()->set($interface, $impl);
-                    }
+        $dependencies = [];
+        $file = $path ?? EASYSWOOLE_ROOT . '/App/Configs/dependencies.php';
+        if (is_file($file)) {
+            $dependencies = include $file;
+        }
+        $providers = Composer::getMergedExtra('easyswoole')['config'] ?? [];
+        foreach ($providers as $provider) {
+            if (is_string($provider) && class_exists($provider) && method_exists($provider, '__invoke')) {
+                $result = (new $provider())();
+                if (isset($result['dependencies'])) {
+                    $dependencies = array_merge($dependencies, $result['dependencies']);
                 }
             }
         }
+        foreach ($dependencies as $interface => $impl) {
+            if (is_int($interface)) {
+                Di::getInstance()->set($impl['key'], $impl['obj'], ...$impl['arg']);
+            } else {
+                Di::getInstance()->set($interface, $impl);
+            }
+        }
+
         ApplicationContext::setContainer(Di::getInstance()->get(ContainerInterface::class));
     }
 

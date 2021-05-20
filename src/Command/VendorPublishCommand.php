@@ -43,7 +43,6 @@ class VendorPublishCommand implements CommandInterface
 
     public function exec(): ?string
     {
-        $fileSystem = new FileSystem();
 
         $package = CommandManager::getInstance()->getArg('package', ArrayHelper::get(CommandManager::getInstance()->getOriginArgv(), 2));
         $force = CommandManager::getInstance()->getOpt('force', false);
@@ -58,6 +57,66 @@ class VendorPublishCommand implements CommandInterface
         $provider = ArrayHelper::get($extra, 'easyswoole.config');
         $config = (new $provider())();
 
+        $publish = ArrayHelper::get($config, 'publish');
+        if (empty($publish)) {
+            return Color::danger(sprintf('No file can be published from package [%s].', $package));
+        }
 
+        if ($show) {
+            foreach ($publish as $item) {
+                $out = '';
+                foreach ($item as $key => $value) {
+                    $out .= sprintf('%s: %s', $key, $value) . PHP_EOL;
+                }
+                Color::green($out);
+            }
+            return '';
+        }
+
+        if ($id) {
+            $item = (array_filter($publish, function ($item) use ($id) {
+                return $item['id'] == $id;
+            }, ARRAY_FILTER_USE_BOTH));
+
+            if (empty($item)) {
+                return Color::red(sprintf('No file can be published from [%s].', $id));
+            }
+
+            return $this->copy($package, $item, $force);
+        }
+
+        return $this->copy($package, $publish, $force);
+    }
+
+    protected function copy($package, $items, $force)
+    {
+        $fileSystem = new FileSystem();
+        foreach ($items as $item) {
+            if (! isset($item['id'], $item['source'], $item['destination'])) {
+                continue;
+            }
+
+            $id = $item['id'];
+            $source = $item['source'];
+            $destination = $item['destination'];
+
+            if (! $force && $fileSystem->exists($destination)) {
+                echo Color::red(sprintf('[%s] already exists.', $destination));
+                continue;
+            }
+
+            if (! $fileSystem->isDirectory($dirname = dirname($destination))) {
+                $fileSystem->makeDirectory($dirname, 0755, true);
+            }
+
+            if ($fileSystem->isDirectory($source)) {
+                $fileSystem->copyDirectory($source, $destination);
+            } else {
+                $fileSystem->copy($source, $destination);
+            }
+
+            echo Color::green(sprintf('[%s] publishes [%s] successfully.', $package, $id));
+        }
+        return '';
     }
 }
