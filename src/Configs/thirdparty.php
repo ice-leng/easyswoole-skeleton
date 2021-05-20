@@ -15,6 +15,12 @@ return [
         // 公总号
         'appId'      => '',
         'appSecret'  => '',
+        // 商户号
+        'mch_id'         => '',
+        'key'            => '',
+        'notifyUrl'      => '',
+        'apiclient_cert' => '',
+        'apiclient_key'  => '',
     ],
     'aliyun' => [
         'app_id'          => '',
@@ -30,6 +36,10 @@ return [
             'roleArn'         => 'acs:ram::xxxx',
             'roleSessionName' => 'external-username',
         ],
+        'sms' => [
+            'sign'     => '',
+            'template' => [],
+        ]
     ],
     'qiniu'    => [
         'access_key' => '',

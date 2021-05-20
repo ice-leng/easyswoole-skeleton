@@ -13,6 +13,8 @@ use EasySwoole\Command\AbstractInterface\CommandHelpInterface;
 use EasySwoole\Command\AbstractInterface\CommandInterface;
 use EasySwoole\Command\Color;
 use EasySwoole\Command\CommandManager;
+use EasySwoole\Skeleton\Helpers\Arrays\ArrayHelper;
+use EasySwoole\Skeleton\Utility\Composer;
 use EasySwoole\Utility\FileSystem;
 
 class VendorPublishCommand implements CommandInterface
@@ -43,13 +45,19 @@ class VendorPublishCommand implements CommandInterface
     {
         $fileSystem = new FileSystem();
 
-        $package = CommandManager::getInstance()->getArg('package');
-        $force = CommandManager::getInstance()->getOpt('force', 'false');
-        $show = CommandManager::getInstance()->getOpt('show', 'false');
+        $package = CommandManager::getInstance()->getArg('package', ArrayHelper::get(CommandManager::getInstance()->getOriginArgv(), 2));
+        $force = CommandManager::getInstance()->getOpt('force', false);
+        $show = CommandManager::getInstance()->getOpt('show', false);
         $id = CommandManager::getInstance()->getOpt('database');
 
-//        echo Color::info("Migration table created successfully.");
+        $extra = Composer::getMergedExtra()[$package] ?? null;
+        if (empty($extra)) {
+            return Color::danger(sprintf('package [%s] misses `extra` field in composer.json.', $package));
+        }
 
-        var_dump($package, $force, $show, $id);
+        $provider = ArrayHelper::get($extra, 'easyswoole.config');
+        $config = (new $provider())();
+
+
     }
 }
