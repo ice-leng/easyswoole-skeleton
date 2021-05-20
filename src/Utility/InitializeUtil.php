@@ -66,14 +66,14 @@ class InitializeUtil
     /**
      * 服务
      *
-     * @param string $path
-     * @param string $namespace
+     * @param string|null $path
+     * @param string|null $namespace
      */
-    public static function serviceDi(string $path, string $namespace): void
+    public static function serviceDi(?string $path = null, ?string $namespace = null): void
     {
-        if (StringHelper::isEmpty($path) || StringHelper::isEmpty($namespace)) {
-            return;
-        }
+        $path = $path ?? EASYSWOOLE_ROOT . '/App/Service';
+        $namespace = $namespace ?? 'App\\Service';
+
         $scan = File::scanDirectory($path);
         if (!$scan) {
             return;
@@ -93,13 +93,11 @@ class InitializeUtil
     }
 
     /**
-     * @param string $path
+     * @param string|null $path
      */
-    public static function config(string $path): void
+    public static function config(?string $path = null): void
     {
-        if (StringHelper::isEmpty($path)) {
-            return;
-        }
+        $path = $path ?? EASYSWOOLE_ROOT . '/App/Configs';
         $data = [];
         $scan = File::scanDirectory($path);
         if (!$scan) {
