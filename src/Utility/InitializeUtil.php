@@ -19,6 +19,7 @@ use EasySwoole\Utility\File;
 use EasySwoole\Skeleton\Helpers\Arrays\ArrayHelper;
 use EasySwoole\EasySwoole\Swoole\EventRegister;
 use EasySwoole\Skeleton\Helpers\StringHelper;
+use EasySwoole\EasySwoole\Crontab\Crontab;
 use Hyperf\Utils\ApplicationContext;
 use Psr\Container\ContainerInterface;
 use Swoole\Coroutine\Scheduler;
@@ -260,5 +261,16 @@ class InitializeUtil
         $register->set(EventRegister::onMessage, function (\swoole_websocket_server $server, \swoole_websocket_frame $frame) use ($dispatch) {
             $dispatch->dispatch($server, $frame->data, $frame);
         });
+    }
+
+    /**
+     * task
+     * @param array $classes
+     */
+    public static function task(array $classes)
+    {
+        foreach ($classes as $class) {
+            Crontab::getInstance()->addTask($class);
+        }
     }
 }
