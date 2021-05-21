@@ -54,11 +54,14 @@ class VendorPublishCommand implements CommandInterface
 
     public function exec(): ?string
     {
-        $dependencyPath = CommandManager::getInstance()->getOpt('dependencyPath', EASYSWOOLE_ROOT . '/App/Configs/dependencies.php');
         $package = CommandManager::getInstance()->getArg('package', ArrayHelper::get(CommandManager::getInstance()->getOriginArgv(), 2));
-        $force = CommandManager::getInstance()->getOpt('force', false);
-        $show = CommandManager::getInstance()->getOpt('show', false);
-        $id = CommandManager::getInstance()->getOpt('database');
+        if (is_null($package)) {
+            return CommandManager::getInstance()->displayCommandHelp($this->commandName());
+        }
+        $dependencyPath = CommandManager::getInstance()->getOpt('dependencyPath', EASYSWOOLE_ROOT . '/App/Configs/dependencies.php');
+        $force = CommandManager::getInstance()->issetOpt('force');
+        $show = CommandManager::getInstance()->issetOpt('show');
+        $id = CommandManager::getInstance()->getOpt('id');
 
         $extra = Composer::getMergedExtra()[$package] ?? null;
         if (empty($extra)) {
