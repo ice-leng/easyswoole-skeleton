@@ -36,7 +36,7 @@ class ConfigProvider
             'publish' => [
                 [
                     'id' => 'thirdparty',
-                    'description' => 'The config for thirdparty.',
+                    'description' => 'The config for wx and aliyun.',
                     'source' => __DIR__ . '/Configs/thirdparty.php',
                     'destination' => EASYSWOOLE_ROOT . '/App/Configs/thirdparty.php',
                 ],
