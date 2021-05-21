@@ -71,9 +71,6 @@ class VendorPublishCommand implements CommandInterface
         $provider = ArrayHelper::get($extra, 'easyswoole.config');
         $config = (new $provider())();
 
-        $dependencies = ArrayHelper::get($config, 'dependencies', []);
-        $this->merge($dependencies, $dependencyPath);
-
         $publish = ArrayHelper::get($config, 'publish');
         if (empty($publish)) {
             return Color::danger(sprintf('No file can be published from package [%s].', $package));
@@ -83,12 +80,15 @@ class VendorPublishCommand implements CommandInterface
             foreach ($publish as $item) {
                 $out = '';
                 foreach ($item as $key => $value) {
-                    $out .= sprintf('%s: %s', $key, $value). PHP_EOL;
+                    $out .= sprintf('%s: %s', $key, $value) . PHP_EOL;
                 }
                 echo Color::green($out) . PHP_EOL;
             }
             return '';
         }
+
+        $dependencies = ArrayHelper::get($config, 'dependencies', []);
+        $this->merge($dependencies, $dependencyPath);
 
         if ($id) {
             $item = (array_filter($publish, function ($item) use ($id) {
@@ -115,7 +115,7 @@ class VendorPublishCommand implements CommandInterface
             $customDependencies = include $file;
             $dependencies = array_merge($dependencies, $customDependencies);
         }
-        $this->fileSystem->put($file, VarDumper::export($dependencies));
+        $this->fileSystem->put($file, "<?php \nreturn " . VarDumper::export($dependencies) . ';');
         echo Color::green("dependencies import successfully.") . PHP_EOL;
     }
 
@@ -131,7 +131,7 @@ class VendorPublishCommand implements CommandInterface
             $destination = $item['destination'];
 
             if (!$force && $this->fileSystem->exists($destination)) {
-                echo Color::red(sprintf('[%s] already exists.', $destination)). PHP_EOL;
+                echo Color::red(sprintf('[%s] already exists.', $destination)) . PHP_EOL;
                 continue;
             }
 
@@ -145,7 +145,7 @@ class VendorPublishCommand implements CommandInterface
                 $this->fileSystem->copy($source, $destination);
             }
 
-            echo Color::green(sprintf('[%s] publishes [%s] successfully.', $package, $id)). PHP_EOL;
+            echo Color::green(sprintf('[%s] publishes [%s] successfully.', $package, $id)) . PHP_EOL;
         }
         return '';
     }
