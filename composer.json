@@ -1,6 +1,6 @@
 {
   "name": "easyswoole-tool/skeleton",
-  "description": "easyswoole skeleton common",
+  "description": "easyswoole skeleton",
   "type": "library",
   "keywords": [
     "php",
