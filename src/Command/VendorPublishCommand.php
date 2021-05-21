@@ -83,7 +83,7 @@ class VendorPublishCommand implements CommandInterface
             foreach ($publish as $item) {
                 $out = '';
                 foreach ($item as $key => $value) {
-                    $out .= sprintf('%s: %s', $key, $value);
+                    $out .= sprintf('%s: %s', $key, $value). PHP_EOL;
                 }
                 echo Color::green($out) . PHP_EOL;
             }
