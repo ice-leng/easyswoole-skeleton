@@ -112,7 +112,7 @@ class VendorPublishCommand implements CommandInterface
 
         if (is_file($file)) {
             $customDependencies = include $file;
-            $dependencies = array_merge($dependencies, $customDependencies);
+            $dependencies = array_merge($customDependencies, $dependencies);
         }
         $this->fileSystem->put($file, "<?php \nreturn " . VarDumper::export($dependencies) . ';');
         echo Color::green("dependencies import successfully.") . PHP_EOL;
