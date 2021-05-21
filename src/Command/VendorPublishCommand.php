@@ -39,10 +39,10 @@ class VendorPublishCommand implements CommandInterface
     public function help(CommandHelpInterface $commandHelp): CommandHelpInterface
     {
         $commandHelp->addAction('package', 'The package file you want to publish.');
-        $commandHelp->addActionOpt('id', 'The id of the package you want to publish.');
-        $commandHelp->addActionOpt('show', 'Show all packages can be publish.');
-        $commandHelp->addActionOpt('force', 'Overwrite any existing files');
-        $commandHelp->addActionOpt('dependencyPath', 'The dependency merge file path.');
+        $commandHelp->addActionOpt('-id', 'The id of the package you want to publish.');
+        $commandHelp->addActionOpt('-show', 'Show all packages can be publish.');
+        $commandHelp->addActionOpt('-force', 'Overwrite any existing files');
+        $commandHelp->addActionOpt('-dependencyPath', 'The dependency merge file path.');
 
         return $commandHelp;
     }
@@ -83,9 +83,9 @@ class VendorPublishCommand implements CommandInterface
             foreach ($publish as $item) {
                 $out = '';
                 foreach ($item as $key => $value) {
-                    $out .= sprintf('%s: %s', $key, $value) . PHP_EOL;
+                    $out .= sprintf('%s: %s', $key, $value);
                 }
-                Color::green($out);
+                echo Color::green($out) . PHP_EOL;
             }
             return '';
         }
@@ -116,7 +116,7 @@ class VendorPublishCommand implements CommandInterface
             $dependencies = array_merge($dependencies, $customDependencies);
         }
         $this->fileSystem->put($file, VarDumper::export($dependencies));
-        echo Color::green("dependencies import successfully.");
+        echo Color::green("dependencies import successfully.") . PHP_EOL;
     }
 
     protected function copy($package, $items, $force)
@@ -131,7 +131,7 @@ class VendorPublishCommand implements CommandInterface
             $destination = $item['destination'];
 
             if (!$force && $this->fileSystem->exists($destination)) {
-                echo Color::red(sprintf('[%s] already exists.', $destination));
+                echo Color::red(sprintf('[%s] already exists.', $destination)). PHP_EOL;
                 continue;
             }
 
@@ -145,7 +145,7 @@ class VendorPublishCommand implements CommandInterface
                 $this->fileSystem->copy($source, $destination);
             }
 
-            echo Color::green(sprintf('[%s] publishes [%s] successfully.', $package, $id));
+            echo Color::green(sprintf('[%s] publishes [%s] successfully.', $package, $id)). PHP_EOL;
         }
         return '';
     }
