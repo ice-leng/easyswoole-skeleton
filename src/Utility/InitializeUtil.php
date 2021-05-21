@@ -128,7 +128,7 @@ class InitializeUtil
             $dependencies = include $file;
         }
         foreach ($dependencies as $interface => $impl) {
-            if (isset($impl['key'], $impl['obj'], $impl['arg'])) {
+            if (is_array($impl) && isset($impl['key'], $impl['obj'], $impl['arg'])) {
                 Di::getInstance()->set($impl['key'], $impl['obj'], ...$impl['arg']);
             } else {
                 Di::getInstance()->set($interface, $impl);
