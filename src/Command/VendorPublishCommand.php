@@ -20,7 +20,6 @@ use EasySwoole\Utility\FileSystem;
 
 class VendorPublishCommand implements CommandInterface
 {
-
     /**
      * @var FileSystem
      */
