@@ -15,8 +15,8 @@ use EasySwoole\Command\Color;
 use EasySwoole\Command\CommandManager;
 use EasySwoole\Skeleton\Helpers\Arrays\ArrayHelper;
 use EasySwoole\Skeleton\Utility\Composer;
+use EasySwoole\Skeleton\Utility\VarDumper;
 use EasySwoole\Utility\FileSystem;
-use Lengbin\Helper\YiiSoft\VarDumper;
 
 class VendorPublishCommand implements CommandInterface
 {
