@@ -69,10 +69,9 @@ class InitializeUtil
      * @param string|null $path
      * @param string|null $namespace
      */
-    public static function serviceDi(?string $path = null, ?string $namespace = null): void
+    public static function serviceDi(?string $path = null, string $namespace = 'App\\Service'): void
     {
         $path = $path ?? EASYSWOOLE_ROOT . '/App/Service';
-        $namespace = $namespace ?? 'App\\Service';
 
         $scan = File::scanDirectory($path);
         if (!$scan) {
@@ -127,15 +126,6 @@ class InitializeUtil
         if (is_file($file)) {
             $dependencies = include $file;
         }
-        $providers = Composer::getMergedExtra('easyswoole')['config'] ?? [];
-        foreach ($providers as $provider) {
-            if (is_string($provider) && class_exists($provider) && method_exists($provider, '__invoke')) {
-                $result = (new $provider())();
-                if (isset($result['dependencies'])) {
-                    $dependencies = array_merge($dependencies, $result['dependencies']);
-                }
-            }
-        }
         foreach ($dependencies as $interface => $impl) {
             if (is_int($interface)) {
                 Di::getInstance()->set($impl['key'], $impl['obj'], ...$impl['arg']);
@@ -143,8 +133,13 @@ class InitializeUtil
                 Di::getInstance()->set($interface, $impl);
             }
         }
-
-        ApplicationContext::setContainer(Di::getInstance()->get(ContainerInterface::class));
+        /**
+         * @var ContainerInterface $container
+         */
+        $container = Di::getInstance()->get(ContainerInterface::class);
+        if ($container) {
+            ApplicationContext::setContainer($container);
+        }
     }
 
     /**

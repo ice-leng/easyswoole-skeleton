@@ -16,11 +16,20 @@ use EasySwoole\Command\CommandManager;
 use EasySwoole\Skeleton\Helpers\Arrays\ArrayHelper;
 use EasySwoole\Skeleton\Utility\Composer;
 use EasySwoole\Utility\FileSystem;
+use Lengbin\Helper\YiiSoft\VarDumper;
 
 class VendorPublishCommand implements CommandInterface
 {
 
-    public $dependencyFileName = 'dependencies';
+    /**
+     * @var FileSystem
+     */
+    protected $fileSystem;
+
+    public function __construct()
+    {
+        $this->fileSystem = new FileSystem();
+    }
 
     public function commandName(): string
     {
@@ -33,6 +42,8 @@ class VendorPublishCommand implements CommandInterface
         $commandHelp->addActionOpt('id', 'The id of the package you want to publish.');
         $commandHelp->addActionOpt('show', 'Show all packages can be publish.');
         $commandHelp->addActionOpt('force', 'Overwrite any existing files');
+        $commandHelp->addActionOpt('dependencyPath', 'The dependency merge file path.');
+
         return $commandHelp;
     }
 
@@ -43,7 +54,7 @@ class VendorPublishCommand implements CommandInterface
 
     public function exec(): ?string
     {
-
+        $dependencyPath = CommandManager::getInstance()->getOpt('dependencyPath', EASYSWOOLE_ROOT . '/App/Configs/dependencies.php');
         $package = CommandManager::getInstance()->getArg('package', ArrayHelper::get(CommandManager::getInstance()->getOriginArgv(), 2));
         $force = CommandManager::getInstance()->getOpt('force', false);
         $show = CommandManager::getInstance()->getOpt('show', false);
@@ -56,6 +67,9 @@ class VendorPublishCommand implements CommandInterface
 
         $provider = ArrayHelper::get($extra, 'easyswoole.config');
         $config = (new $provider())();
+
+        $dependencies = ArrayHelper::get($config, 'dependencies', []);
+        $this->merge($dependencies, $dependencyPath);
 
         $publish = ArrayHelper::get($config, 'publish');
         if (empty($publish)) {
@@ -88,11 +102,24 @@ class VendorPublishCommand implements CommandInterface
         return $this->copy($package, $publish, $force);
     }
 
+    protected function merge(array $dependencies, string $file)
+    {
+        if (!$this->fileSystem->isDirectory($dirname = dirname($file))) {
+            $this->fileSystem->makeDirectory($dirname, 0755, true);
+        }
+
+        if (is_file($file)) {
+            $customDependencies = include $file;
+            $dependencies = array_merge($dependencies, $customDependencies);
+        }
+        $this->fileSystem->put($file, VarDumper::export($dependencies));
+        echo Color::green("dependencies import successfully.");
+    }
+
     protected function copy($package, $items, $force)
     {
-        $fileSystem = new FileSystem();
         foreach ($items as $item) {
-            if (! isset($item['id'], $item['source'], $item['destination'])) {
+            if (!isset($item['id'], $item['source'], $item['destination'])) {
                 continue;
             }
 
@@ -100,19 +127,19 @@ class VendorPublishCommand implements CommandInterface
             $source = $item['source'];
             $destination = $item['destination'];
 
-            if (! $force && $fileSystem->exists($destination)) {
+            if (!$force && $this->fileSystem->exists($destination)) {
                 echo Color::red(sprintf('[%s] already exists.', $destination));
                 continue;
             }
 
-            if (! $fileSystem->isDirectory($dirname = dirname($destination))) {
-                $fileSystem->makeDirectory($dirname, 0755, true);
+            if (!$this->fileSystem->isDirectory($dirname = dirname($destination))) {
+                $this->fileSystem->makeDirectory($dirname, 0755, true);
             }
 
-            if ($fileSystem->isDirectory($source)) {
-                $fileSystem->copyDirectory($source, $destination);
+            if ($this->fileSystem->isDirectory($source)) {
+                $this->fileSystem->copyDirectory($source, $destination);
             } else {
-                $fileSystem->copy($source, $destination);
+                $this->fileSystem->copy($source, $destination);
             }
 
             echo Color::green(sprintf('[%s] publishes [%s] successfully.', $package, $id));
