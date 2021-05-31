@@ -63,7 +63,7 @@ abstract class BaseService
      *
      * @return Sort
      */
-    private function getDefaultSort(string $attribute = 'create_at'): Sort
+    protected function getDefaultSort(string $attribute = 'create_at'): Sort
     {
         return new Sort([
             'attributes'   => [
