@@ -60,16 +60,17 @@ abstract class BaseService
 
     /**
      * @param string $attribute
+     * @param int    $direction
      *
      * @return Sort
      */
-    protected function getDefaultSort(string $attribute = 'create_at'): Sort
+    protected function getDefaultSort(string $attribute = 'create_at', int $direction = SORT_DESC): Sort
     {
         return new Sort([
             'attributes'   => [
                 $attribute,
             ],
-            'defaultOrder' => [$attribute => SORT_DESC],
+            'defaultOrder' => [$attribute => $direction],
         ]);
     }
 
