@@ -195,6 +195,6 @@ abstract class BaseService
             return $path;
         }
         $config = config($config);
-        return ($config ? (RegularHelper::isInvalidUrl($config)) ? $config : (config($config) ?? '') : '') . $path;
+        return ($config ? (RegularHelper::isInvalidUrl($config) ? $config : (config($config) ?? '')) : '') . $path;
     }
 }
