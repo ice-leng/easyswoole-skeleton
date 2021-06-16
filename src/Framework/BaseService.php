@@ -186,7 +186,7 @@ abstract class BaseService
      *
      * @return string
      */
-    public function imageUrl(string $path, string $config = 'thirdparty.aliyun.url'): string
+    public function imageUrl(string $path, string $config = 'app.image_url'): string
     {
         if (StringHelper::isEmpty($path)) {
             return $path;
@@ -194,6 +194,7 @@ abstract class BaseService
         if (!RegularHelper::isInvalidUrl($path)) {
             return $path;
         }
-        return config($config) ?? '' . $path;
+        $config = config($config);
+        return ($config ? (RegularHelper::isInvalidUrl($config)) ? $config : (config($config) ?? '') : '') . $path;
     }
 }

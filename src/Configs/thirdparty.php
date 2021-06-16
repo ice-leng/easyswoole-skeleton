@@ -10,11 +10,11 @@
 return [
     'wechat' => [
         // 小程序
-        'app_id'     => '',
-        'app_secret' => '',
+        'app_id'         => '',
+        'app_secret'     => '',
         // 公总号
-        'appId'      => '',
-        'appSecret'  => '',
+        'appId'          => '',
+        'appSecret'      => '',
         // 商户号
         'mch_id'         => '',
         'key'            => '',
@@ -23,10 +23,10 @@ return [
         'apiclient_key'  => '',
     ],
     'aliyun' => [
-        'app_id'          => '',
-        'privateKey'      => '',
-        'publicKey'       => '',
-        'oss' => [
+        'app_id'     => '',
+        'privateKey' => '',
+        'publicKey'  => '',
+        'oss'        => [
             'access_key'      => '',
             'secret_key'      => '',
             'bucket'          => '',
@@ -36,15 +36,39 @@ return [
             'roleArn'         => 'acs:ram::xxxx',
             'roleSessionName' => 'external-username',
         ],
-        'sms' => [
+        'sms'        => [
             'sign'     => '',
             'template' => [],
-        ]
+        ],
     ],
-    'qiniu'    => [
+    'qiniu'  => [
         'access_key' => '',
         'secret_key' => '',
         'bucket'     => '',
         'url'        => '',
+    ],
+    'tencent' => [
+        'oss' => [
+            'url'             => 'https://sts.tencentcloudapi.com/',
+            'domain'          => 'sts.tencentcloudapi.com',
+            'secretId'        => '',
+            'secretKey'       => '',
+            'durationSeconds' => 1800,
+            'bucket'          => '',
+            'region'          => '',
+            'allowPrefix'     => '*',
+            'allowActions'    => [
+                // 简单上传
+                "name/cos:PutObject",
+                // 表单上传、小程序上传
+                "name/cos:PostObject",
+                // 分片上传
+                "name/cos:InitiateMultipartUpload",
+                "name/cos:ListMultipartUploads",
+                "name/cos:ListParts",
+                "name/cos:UploadPart",
+                "name/cos:CompleteMultipartUpload",
+            ],
+        ],
     ],
 ];

@@ -12,7 +12,7 @@ if (!function_exists('config')) {
 
 if (!function_exists('isOnline')) {
     function isOnline() {
-        $env = Config::getInstance()->getConf('ENV');
+        $env = Config::getInstance()->getConf('app.env');
         return $env && strtolower($env) === 'online';
     }
 }
