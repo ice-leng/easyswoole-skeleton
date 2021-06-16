@@ -9,5 +9,5 @@
 
 return [
     'env'       => 'dev',
-    'image_url' => 'thirdparty.aliyun.url',
+    'image_url' => 'thirdparty.aliyun.oss.url',
 ];
