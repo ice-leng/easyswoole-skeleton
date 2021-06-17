@@ -70,6 +70,24 @@ class ConfigProvider
                     'source' => __DIR__ . '/Configs/jwt.php',
                     'destination' => EASYSWOOLE_ROOT . '/App/Configs/jwt.php',
                 ],
+                [
+                    'id' => 'index',
+                    'description' => 'The config for controller index.',
+                    'source' => dirname(__DIR__) . '/publish/Index.php',
+                    'destination' => EASYSWOOLE_ROOT . '/App/HttpController/Index.php',
+                ],
+                [
+                    'id' => 'router',
+                    'description' => 'The config for controller router.',
+                    'source' => dirname(__DIR__) . '/publish/Router.php',
+                    'destination' => EASYSWOOLE_ROOT . '/App/HttpController/Router.php',
+                ],
+                [
+                    'id' => 'swagger',
+                    'description' => 'The config for controller swagger.',
+                    'source' => dirname(__DIR__) . '/publish/Swagger.php',
+                    'destination' => EASYSWOOLE_ROOT . '/App/HttpController/Swagger.php',
+                ],
             ],
         ];
     }
