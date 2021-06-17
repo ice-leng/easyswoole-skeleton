@@ -25,7 +25,7 @@ abstract class BaseService
     public function page(Builder $query, PageEntity $pageEntity): array
     {
         $pageSize = $pageEntity->getPageSize();
-        $total = $total = Db::selectOne("select count(*) as count from ({$query->toSql()}) as b", $query->getBindings())->count;
+        $total = Db::selectOne("select count(*) as count from ({$query->toSql()}) as b", $query->getBindings())->count;
         $list = $query->forPage($pageEntity->getPage(), $pageSize)->get()->toArray();
         return [
             'list'     => $list,
