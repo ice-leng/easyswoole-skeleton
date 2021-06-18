@@ -1,29 +1,22 @@
 <?php
 
-
 namespace App\HttpController;
 
-
 use EasySwoole\Http\AbstractInterface\AbstractRouter;
-use EasySwoole\Http\Request;
-use EasySwoole\Http\Response;
+use EasySwoole\HttpAnnotation\Swagger\Annotation\ApiSuccessTemplate;
+use EasySwoole\HttpAnnotation\Utility\Scanner;
 use FastRoute\RouteCollector;
 
 class Router extends AbstractRouter
 {
+    /**
+     * @param RouteCollector $routeCollector
+     * @throws \EasySwoole\Annotation\Exception
+     */
     function initialize(RouteCollector $routeCollector)
     {
-        /*
-          * eg path : /router/index.html  ; /router/ ;  /router
-         */
-        $routeCollector->get('/router','/test');
-        /*
-         * eg path : /closure/index.html  ; /closure/ ;  /closure
-         */
-        $routeCollector->get('/closure',function (Request $request,Response $response){
-            $response->write('this is closure router');
-            //不再进入控制器解析
-            return false;
-        });
+        $scanner = new Scanner();
+        $scanner->getParser()->getAnnotation()->addParserTag(new ApiSuccessTemplate());
+        $scanner->mappingRouter($routeCollector, EASYSWOOLE_ROOT.'/App/HttpController');
     }
 }

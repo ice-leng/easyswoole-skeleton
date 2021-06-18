@@ -83,6 +83,12 @@ class ConfigProvider
                     'destination' => EASYSWOOLE_ROOT . '/App/HttpController/Router.php',
                 ],
                 [
+                    'id' => 'swagger',
+                    'description' => 'The config for controller swagger.',
+                    'source' => dirname(__DIR__) . '/publish/Swagger.php',
+                    'destination' => EASYSWOOLE_ROOT . '/App/HttpController/Swagger.php',
+                ],
+                [
                     'id' => 'dev',
                     'description' => 'The config dev',
                     'source' => dirname(__DIR__) . '/publish/dev.php',
