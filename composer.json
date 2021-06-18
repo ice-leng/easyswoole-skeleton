@@ -33,7 +33,10 @@
     "alipaysdk/easysdk": "^2.2",
     "aliyuncs/oss-sdk-php": "^2.4",
     "alibabacloud/client": "^1.5",
-    "qiniu/php-sdk": "^7.3"
+    "qiniu/php-sdk": "^7.3",
+
+    "easyswoole/http-annotation-swagger": "dev-master",
+    "easyswoole/hyperf-orm": "dev-master"
   },
   "require-dev": {
     "swoole/ide-helper": "~4.4.7"
