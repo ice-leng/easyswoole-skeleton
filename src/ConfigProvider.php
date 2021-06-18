@@ -89,12 +89,6 @@ class ConfigProvider
                     'destination' => EASYSWOOLE_ROOT . '/App/HttpController/Swagger.php',
                 ],
                 [
-                    'id' => 'bootstrap',
-                    'description' => 'The config bootstrap.',
-                    'source' => dirname(__DIR__) . '/publish/bootstrap.php',
-                    'destination' => EASYSWOOLE_ROOT . '/bootstrap.php',
-                ],
-                [
                     'id' => 'dev',
                     'description' => 'The config dev',
                     'source' => dirname(__DIR__) . '/publish/dev.php',
@@ -105,12 +99,6 @@ class ConfigProvider
                     'description' => 'The config produce',
                     'source' => dirname(__DIR__) . '/publish/produce.php',
                     'destination' => EASYSWOOLE_ROOT . '/produce.php',
-                ],
-                [
-                    'id' => 'easyswoole',
-                    'description' => 'The config easyswoole',
-                    'source' => dirname(__DIR__) . '/publish/easyswoole',
-                    'destination' => EASYSWOOLE_ROOT . '/easyswoole',
                 ],
                 [
                     'id' => 'easyswooleEvent',
