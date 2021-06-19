@@ -9,7 +9,13 @@
 
 namespace EasySwoole\Skeleton\Component\Menu;
 
+use EasySwoole\Skeleton\Entities\PageEntity;
+use EasySwoole\Skeleton\Errors\CommonError;
 use EasySwoole\Skeleton\Framework\BaseService;
+use EasySwoole\Skeleton\Framework\BizException;
+use EasySwoole\Skeleton\Utility\InitializeUtil;
+use EasySwoole\Utility\File;
+use EasySwoole\Utility\FileSystem;
 use EasySwoole\Utility\SnowFlake;
 
 class MenuService extends BaseService
@@ -121,13 +127,16 @@ class MenuService extends BaseService
     {
         $menuList = $parentMenuIcon = [];
         $results = config('menu', []);
-
-        $roles = make(RoleInterface::class)->getRoleByKey($key);
-        $permissions = make(PermissionInterface::class)->getPermissionByKey($key);
+        $roleInterface = make(RoleInterface::class);
+        $roles = $roleInterface ? $roleInterface->getRoleByKey($key) : [];
+        $permissionInterface = make(PermissionInterface::class);
+        $permissions = $permissionInterface ? $permissionInterface->getPermissionByKey($key) : [];
         $isSupper = (empty($roles) && empty($permissions)) || in_array(-1, $roles) || in_array(-1, $permissions);
         foreach ($results as $result) {
             $menu = new Menu($result);
-
+            if (!$isSupper || empty(array_intersect($menu->role, $roles)) || !in_array($menu->path, $permissions)) {
+                continue;
+            }
             $sort = $menu->sort;
             $name = $menu->name;
             $router = $menu->path;
@@ -193,5 +202,77 @@ class MenuService extends BaseService
             $data[] = $parentMenu;
         }
         return $data;
+    }
+
+    /**
+     * @param array           $params
+     * @param array|string[]  $field
+     * @param PageEntity|null $pageEntity
+     *
+     * @return array
+     */
+    public function getList(array $params = [], array $field = ['*'], ?PageEntity $pageEntity = null): array
+    {
+        $results = config('menu', []);
+        return $this->pageByArray($results, $pageEntity);
+    }
+
+    public function create(array $params): array
+    {
+        $menu =  (new Menu($params))->toArray();
+        $results = config('menu', []);
+        $results[] = $menu;
+        $this->put($results);
+        return $menu;
+    }
+
+    public function update(array $params): array
+    {
+        $menu =  (new Menu($params))->toArray();
+        $results = config('menu', []);
+        $isUpdate = false;
+        foreach ($results as $key => $item) {
+            if ($item['path'] === $menu['path']) {
+                $results[$key] = $menu;
+                $isUpdate = true;
+                break;
+            }
+        }
+        if (!$isUpdate) {
+            throw new BizException(CommonError::INVALID_PARAMS);
+        }
+        $this->put($results);
+        return $menu;
+    }
+
+    public function remove(array $params): int
+    {
+        $menu =  (new Menu($params))->toArray();
+        $results = config('menu', []);
+        $isRemove = false;
+        foreach ($results as $key => $item) {
+            if ($item['path'] === $menu['path']) {
+                unset($results[$key]);
+                $isRemove = true;
+                break;
+            }
+        }
+        if (!$isRemove) {
+            throw new BizException(CommonError::INVALID_PARAMS);
+        }
+        $results = array_values($results);
+        $this->put($results);
+        return 1;
+    }
+
+    protected function put(array $results)
+    {
+        $fileSystem = new FileSystem();
+        $file = EASYSWOOLE_ROOT . '/App/Configs/menu.php';
+        if ($fileSystem->missing($file)) {
+            File::touchFile($file);
+        }
+        $fileSystem->put($file, "<?php\n\nreturn " . var_export($results, true) . ";\n");
+        InitializeUtil::config();
     }
 }
