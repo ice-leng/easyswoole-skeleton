@@ -72,4 +72,10 @@ class Menu extends BaseObject
      * @var int 排序
      */
     public $sort;
+
+    /**
+     * 角色
+     * @var array
+     */
+    public $role = [];
 }

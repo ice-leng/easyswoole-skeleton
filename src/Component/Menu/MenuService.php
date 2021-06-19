@@ -9,9 +9,10 @@
 
 namespace EasySwoole\Skeleton\Component\Menu;
 
+use EasySwoole\Skeleton\Framework\BaseService;
 use EasySwoole\Utility\SnowFlake;
 
-class MenuService
+class MenuService extends BaseService
 {
     /**
      * @param array $array
@@ -112,22 +113,24 @@ class MenuService
     }
 
     /**
-     * @param array $permission
+     * @param string $key
      *
      * @return array[]
      */
-    protected function getMenuForConfig(array $permission = []): array
+    protected function getMenuForConfig(string $key): array
     {
         $menuList = $parentMenuIcon = [];
         $results = config('menu', []);
+
+        $roles = make(RoleInterface::class)->getRoleByKey($key);
+        $permissions = make(PermissionInterface::class)->getPermissionByKey($key);
+        $isSupper = (empty($roles) && empty($permissions)) || in_array(-1, $roles) || in_array(-1, $permissions);
         foreach ($results as $result) {
             $menu = new Menu($result);
+
             $sort = $menu->sort;
             $name = $menu->name;
             $router = $menu->path;
-            if ($menu->isMenu) {
-                $menu->isMenu = in_array($router, $permission);
-            }
             $names = explode('/', $name);
             $menuName = array_pop($names);
             $newName = implode('/', $names);
@@ -150,13 +153,13 @@ class MenuService
     }
 
     /**
-     * @param array $permission
+     * @param string $key
      *
      * @return array
      */
-    public function generateMenu(array $permission = []): array
+    public function generateMenu(string $key): array
     {
-        [$menus, $parentMenuIcon] = $this->getMenuForConfig($permission);
+        [$menus, $parentMenuIcon] = $this->getMenuForConfig($key);
         $results = $data = [];
         foreach ($menus as $menu) {
             foreach ($menu as $key => $value) {
