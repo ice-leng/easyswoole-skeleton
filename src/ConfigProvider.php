@@ -105,12 +105,6 @@ class ConfigProvider
                     'description' => 'The config easyswoole event',
                     'source' => dirname(__DIR__) . '/publish/EasySwooleEvent.php',
                     'destination' => EASYSWOOLE_ROOT . '/EasySwooleEvent.php',
-                ],
-                [
-                    'id' => 'menu',
-                    'description' => 'The config menu',
-                    'source' => __DIR__ . '/Configs/menu.php',
-                    'destination' => EASYSWOOLE_ROOT . '/App/Configs/menu.php',
                 ]
             ],
         ];

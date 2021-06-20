@@ -42,6 +42,7 @@ class VendorPublishCommand implements CommandInterface
         $commandHelp->addActionOpt('-show', 'Show all packages can be publish.');
         $commandHelp->addActionOpt('-force', 'Overwrite any existing files');
         $commandHelp->addActionOpt('-dependencyPath', 'The dependency merge file path.');
+        $commandHelp->addActionOpt('-menuPath', 'The menu merge file path.');
 
         return $commandHelp;
     }
@@ -58,6 +59,7 @@ class VendorPublishCommand implements CommandInterface
             return CommandManager::getInstance()->displayCommandHelp($this->commandName());
         }
         $dependencyPath = CommandManager::getInstance()->getOpt('dependencyPath', EASYSWOOLE_ROOT . '/App/Configs/dependencies.php');
+        $menuPath = CommandManager::getInstance()->getOpt('menuPath', EASYSWOOLE_ROOT . '/App/Configs/menu.php');
         $force = CommandManager::getInstance()->issetOpt('force');
         $show = CommandManager::getInstance()->issetOpt('show');
         $id = CommandManager::getInstance()->getOpt('id');
@@ -88,6 +90,8 @@ class VendorPublishCommand implements CommandInterface
 
         $dependencies = ArrayHelper::get($config, 'dependencies', []);
         $this->merge($dependencies, $dependencyPath);
+        $menus = ArrayHelper::get($config, 'menus', []);
+        $this->menu($menus, $menuPath);
 
         if ($id) {
             $item = (array_filter($publish, function ($item) use ($id) {
@@ -106,6 +110,9 @@ class VendorPublishCommand implements CommandInterface
 
     protected function merge(array $dependencies, string $file)
     {
+        if (empty($dependencies)) {
+            return;
+        }
         if (!$this->fileSystem->isDirectory($dirname = dirname($file))) {
             $this->fileSystem->makeDirectory($dirname, 0755, true);
         }
@@ -116,6 +123,23 @@ class VendorPublishCommand implements CommandInterface
         }
         $this->fileSystem->put($file, "<?php \nreturn " . VarDumper::export($dependencies) . ';');
         echo Color::green("dependencies import successfully.") . PHP_EOL;
+    }
+
+    protected function menu(array $menus, string $file)
+    {
+        if (empty($menus)) {
+            return;
+        }
+        if (!$this->fileSystem->isDirectory($dirname = dirname($file))) {
+            $this->fileSystem->makeDirectory($dirname, 0755, true);
+        }
+
+        if (is_file($file)) {
+            $customMenus = include $file;
+            $menus = array_merge($customMenus, $menus);
+        }
+        $this->fileSystem->put($file, "<?php \nreturn " . VarDumper::export($menus) . ';');
+        echo Color::green("menus import successfully.") . PHP_EOL;
     }
 
     protected function copy($package, $items, $force)
