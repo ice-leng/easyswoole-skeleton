@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace EasySwoole\Skeleton\Framework;
 
+use EasySwoole\Component\Context\ContextManager;
 use EasySwoole\EasySwoole\Logger;
 use EasySwoole\EasySwoole\ServerManager;
 use EasySwoole\Skeleton\Helpers\StringHelper;
@@ -53,8 +54,23 @@ class BaseController extends AnnotationController
         $this->fail($error->getValue(), $error->getMessage());
     }
 
+    public function getLocalhost(): string
+    {
+        $uri = $this->request()->getUri();
+        $localhost = '';
+        if ($uri->getScheme() != '') {
+            $localhost .= $uri->getScheme() . ':';
+        }
+        if ($uri->getAuthority() != '') {
+            $localhost .= '//' . $uri->getAuthority();
+        }
+        return $localhost;
+    }
+
     public function onRequest(?string $action): ?bool
     {
+        $local = config('thirdparty.local.url_name',  'localhost');
+        ContextManager::getInstance()->set($local, $this->getLocalhost());
         //TODO 版本号控制
         return parent::onRequest($action);
     }

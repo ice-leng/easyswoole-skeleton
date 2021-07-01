@@ -8,7 +8,7 @@
  */
 
 return [
-    'wechat' => [
+    'wechat'  => [
         // 小程序
         'app_id'         => '',
         'app_secret'     => '',
@@ -22,7 +22,7 @@ return [
         'apiclient_cert' => '',
         'apiclient_key'  => '',
     ],
-    'aliyun' => [
+    'aliyun'  => [
         'app_id'     => '',
         'privateKey' => '',
         'publicKey'  => '',
@@ -41,11 +41,13 @@ return [
             'template' => [],
         ],
     ],
-    'qiniu'  => [
-        'access_key' => '',
-        'secret_key' => '',
-        'bucket'     => '',
-        'url'        => '',
+    'qiniu'   => [
+        'oss' => [
+            'access_key' => '',
+            'secret_key' => '',
+            'bucket'     => '',
+            'url'        => '',
+        ]
     ],
     'tencent' => [
         'oss' => [
@@ -70,5 +72,9 @@ return [
                 "name/cos:CompleteMultipartUpload",
             ],
         ],
+    ],
+    'local'   => [
+        'url_name' => 'localhost',
+        'upload'   => EASYSWOOLE_ROOT . '/public/upload',
     ],
 ];

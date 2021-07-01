@@ -2,6 +2,7 @@
 
 namespace EasySwoole\Skeleton\Framework;
 
+use EasySwoole\Component\Context\ContextManager;
 use EasySwoole\HyperfOrm\Db;
 use EasySwoole\Skeleton\Helpers\RegularHelper;
 use EasySwoole\Skeleton\Helpers\StringHelper;
@@ -194,6 +195,14 @@ abstract class BaseService
         if (!RegularHelper::isInvalidUrl($path)) {
             return $path;
         }
+
+        $localPath = config('thirdparty.local.upload', EASYSWOOLE_ROOT . '/public/upload');
+        if (is_file($localPath . $path)) {
+            $local = config('thirdparty.local.url_name',  'localhost');
+            $url = ContextManager::getInstance()->get($local) ?? '';
+            return $url . $path;
+        }
+
         $config = config($config);
         if (RegularHelper::isInvalidUrl($config)) {
             $config = config($config);
