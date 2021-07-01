@@ -196,7 +196,7 @@ abstract class BaseService
             return $path;
         }
 
-        $localPath = config('thirdparty.local.upload', EASYSWOOLE_ROOT . '/public/upload');
+        $localPath = EASYSWOOLE_ROOT . config('thirdparty.local.bucket', '/public/upload');
         if (is_file($localPath . $path)) {
             $local = config('thirdparty.local.url_name',  'localhost');
             $url = ContextManager::getInstance()->get($local) ?? '';

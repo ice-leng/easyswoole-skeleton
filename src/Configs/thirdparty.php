@@ -75,6 +75,6 @@ return [
     ],
     'local'   => [
         'url_name' => 'localhost',
-        'upload'   => EASYSWOOLE_ROOT . '/public/upload',
+        'bucket'   => '/public/upload',
     ],
 ];
