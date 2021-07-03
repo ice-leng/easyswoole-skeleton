@@ -8,6 +8,5 @@
  */
 
 return [
-    'env'       => 'dev',
     'image_url' => 'thirdparty.aliyun.oss.url',
 ];

@@ -28,5 +28,6 @@ return [
     ],
     'LOG_DIR' => [
         'dir' => EASYSWOOLE_ROOT . '/runtime/log'
-    ]
+    ],
+    'env'       => 'dev',
 ];
