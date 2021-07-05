@@ -70,7 +70,8 @@ class BaseController extends AnnotationController
     public function onRequest(?string $action): ?bool
     {
         $local = config('thirdparty.local.url_name',  'localhost');
-        ContextManager::getInstance()->set($local, $this->getLocalhost());
+        $url = config('thirdparty.local.url') ?? $this->getLocalhost();
+        ContextManager::getInstance()->set($local, $url);
         //TODO 版本号控制
         return parent::onRequest($action);
     }

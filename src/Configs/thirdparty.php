@@ -74,6 +74,7 @@ return [
         ],
     ],
     'local'   => [
+        'url'         => '',
         'url_name'    => 'localhost',
         'bucket'      => '/public/upload',
         'upload_time' => 5,
