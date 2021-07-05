@@ -196,17 +196,18 @@ abstract class BaseService
             return $path;
         }
 
-        $localPath = EASYSWOOLE_ROOT . config('thirdparty.local.bucket', '/public/upload');
+        $bucket = config('thirdparty.local.bucket', '/public/upload');
+        $localPath = EASYSWOOLE_ROOT . $bucket;
         if (is_file($localPath . $path)) {
-            $local = config('thirdparty.local.url_name',  'localhost');
+            $local = config('thirdparty.local.url_name', 'localhost');
             $url = ContextManager::getInstance()->get($local) ?? '';
-            return $url . $path;
+            return $url . $bucket . $path;
         }
 
         $config = config($config);
         if (RegularHelper::isInvalidUrl($config)) {
             $config = config($config);
         }
-        return $config. $path;
+        return $config . $path;
     }
 }

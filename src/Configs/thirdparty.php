@@ -47,7 +47,7 @@ return [
             'secret_key' => '',
             'bucket'     => '',
             'url'        => '',
-        ]
+        ],
     ],
     'tencent' => [
         'oss' => [
@@ -74,7 +74,8 @@ return [
         ],
     ],
     'local'   => [
-        'url_name' => 'localhost',
-        'bucket'   => '/public/upload',
+        'url_name'    => 'localhost',
+        'bucket'      => '/public/upload',
+        'upload_time' => 5,
     ],
 ];
