@@ -74,9 +74,10 @@ return [
         ],
     ],
     'local'   => [
-        'url'         => '',
-        'url_name'    => 'localhost',
-        'bucket'      => '/public/upload',
-        'upload_time' => 5,
+        'url'              => '',
+        'url_name'         => 'localhost',
+        'bucket'           => '/public/upload',
+        'upload_time'      => 5,
+        'remove_file_time' => 3600 * 24,
     ],
 ];

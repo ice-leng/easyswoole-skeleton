@@ -69,7 +69,7 @@ class BaseController extends AnnotationController
 
     public function onRequest(?string $action): ?bool
     {
-        $local = config('thirdparty.local.url_name',  'localhost');
+        $local = config('thirdparty.local.url_name', 'localhost');
         $url = config('thirdparty.local.url') ?? $this->getLocalhost();
         ContextManager::getInstance()->set($local, $url);
         //TODO 版本号控制
@@ -211,7 +211,7 @@ class BaseController extends AnnotationController
     {
         if (!$this->response()->isEndResponse()) {
             // 获取指定路径下的 excel 文件，例如这里获取项目根目录下的 test.xlsx 文件
-            $this->response()->write(file_get_contents($file));
+            $this->response()->sendFile($file);
             $contentType = $this->getContentType(explode('.', $file)[1]);
             // 设置文件流内容类型
             if ($contentType) {
@@ -239,8 +239,12 @@ class BaseController extends AnnotationController
     {
         $server = ServerManager::getInstance()->getSwooleServer();
         $client = $server->getClientInfo($this->request()->getSwooleRequest()->fd);
-        $clientAddress = $client['remote_ip'];
         $xri = $this->request()->getHeader($headerName);
+        if (!empty($xri)) {
+            $clientAddress = $xri[0];
+        } else {
+            $clientAddress = $client['remote_ip'];
+        }
         $xff = $this->request()->getHeader('x-forwarded-for');
         if ($clientAddress === '127.0.0.1') {
             if (!empty($xri)) {  // 如果有xri 则判定为前端有NGINX等代理

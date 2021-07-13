@@ -23,8 +23,9 @@ return [
         'dir' => EASYSWOOLE_ROOT . '/runtime/log',
         'level' => \EasySwoole\Log\LoggerInterface::LOG_LEVEL_DEBUG,
         'handler' => null,
-        'logConsole' => false,
-        'ignoreCategory' => [],
+        'logConsole' => true,
+        'displayConsole' => true,
+        'ignoreCategory' => []
     ],
     'LOG_DIR' => [
         'dir' => EASYSWOOLE_ROOT . '/runtime/log'
