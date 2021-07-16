@@ -99,12 +99,12 @@ abstract class BaseService
     {
         $item = [];
         $results = isset($data['list']) ? $data['list'] : $data;
-        foreach ($results as $key => $result) {
+        foreach ($results as $result) {
             $content = call_user_func($call, $result);
             if (is_null($content)) {
                 continue;
             }
-            $item[$key] = $content;
+            $item[] = $content;
         }
         if (isset($data['list'])) {
             $data['list'] = $item;
