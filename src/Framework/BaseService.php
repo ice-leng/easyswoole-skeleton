@@ -205,6 +205,11 @@ abstract class BaseService
         }
 
         $config = config($config);
+
+        if (is_callable($config)) {
+            return call_user_func($config, $path);
+        }
+
         if (RegularHelper::isInvalidUrl($config)) {
             $config = config($config);
         }
