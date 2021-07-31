@@ -23,7 +23,7 @@ class RedisDriver extends Driver implements CacheInterface
     public function get($key, $default = null)
     {
         $res = $this->getRedis()->get($this->getCacheKey($key));
-        if ($res === false) {
+        if ($res === false || is_null($res)) {
             return $default;
         }
 
